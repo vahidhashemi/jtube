@@ -9,7 +9,7 @@ public class Video {
     @GeneratedValue
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Long userId;
+    private User user;
     private String title;
     private String description;
     private Date date;
