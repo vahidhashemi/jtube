@@ -22,11 +22,11 @@ public class VideoRepositoryIntegrationTest {
     @Autowired
     VideoRepository videoRepository;
 
-    UserRepositroyIntegrationTest userRepo;
+    UserServiceIntegrationTest userRepo;
 
     @Before
     public void init() {
-        userRepo = new UserRepositroyIntegrationTest();
+        userRepo = new UserServiceIntegrationTest();
     }
 
     @Test
