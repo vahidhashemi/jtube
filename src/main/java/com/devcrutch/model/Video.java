@@ -12,6 +12,7 @@ public class Video {
     private User user;
     private String title;
     private String description;
+    @Temporal(value = TemporalType.DATE )
     private Date date;
     private String videoUrl;
 
