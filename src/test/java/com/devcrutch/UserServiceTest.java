@@ -1,8 +1,9 @@
 package com.devcrutch;
 
 import com.devcrutch.model.User;
-import com.devcrutch.repository.UserRepository;
 import com.devcrutch.service.UserService;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,39 +11,67 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = App.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class UserServiceIntegrationTest {
+public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    protected User createUser(String username, String password, boolean isAdmin) {
-        return new User(username, password, isAdmin);
-    }
     @Test
-    public void addNonAdminUser() {
-        User user = createUser("user1", "qwerty",false);
+    public void testCreateUser() {
+        User user = new User("user", "password", false);
+        User createdUser = userService.createUser(user);
+        assertNotNull(createdUser);
+        assertEquals("user", createdUser.getUsername());
+        assertEquals("password", createdUser.getPassword());
+        assertEquals(false, createdUser.isAdmin());
+    }
+
+    @Test
+    public void testGetAllUsers() {
+        List<User> userList = userService.getAllusers();
+        assertNotNull(userList);
+    }
+
+    @Test
+    public void testUpdateUserProfile() {
+        Long userId;
+        User user = new User("user10", "qwerty", false);
+        User createdUser = userService.createUser(user);
+        userId = createdUser.getId();
+        assertNotNull(createdUser);
+        createdUser.setPassword("qazwsx");
+        userService.updateUserProfile(user);
+        User updatedUser = userService.getUserInfo(userId);
+        assertEquals("qazwsx", updatedUser.getPassword());
+    }
+
+    @Test
+    public void testAddNonAdminUser() {
+        User user = new User("user1", "qwerty",false);
         User savedUser = userService.createUser(user);
         assertNotNull(savedUser);
         assertEquals(user, savedUser);
     }
 
     @Test
-    public void addAdminUser() {
-        User user = createUser("admin", "qwerty", true);
+    public void testAddAdminUser() {
+        User user = new User("admin", "qwerty", true);
         User savedUser = userService.createUser(user);
         assertNotNull(savedUser);
         assertEquals(user, savedUser);
     }
 
     @Test
-    public void changePassword() {
+    public void testChangePassword() {
         String newPassword = "qwerty";
-        User user = createUser("dummy", " qwe", false);
+        User user = new User("dummy", " qwe", false);
         User savedUser = userService.createUser(user);
         Long savedUserId = savedUser.getId();
         savedUser.setPassword(newPassword);
@@ -52,8 +81,8 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    public void makeUserAdmin() {
-        User user = createUser("dummy2", "qwe", false);
+    public void testMakeUserAdmin() {
+        User user = new User("dummy2", "qwe", false);
         User savedUser = userService.createUser(user);
         User adminUser = userService.makeUserAdmin(savedUser.getId(), true);
         assertEquals(true, adminUser.isAdmin());

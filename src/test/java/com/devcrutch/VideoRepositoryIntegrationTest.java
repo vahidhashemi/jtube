@@ -22,16 +22,16 @@ public class VideoRepositoryIntegrationTest {
     @Autowired
     VideoRepository videoRepository;
 
-    UserServiceIntegrationTest userRepo;
+    UserServiceTest userRepo;
 
     @Before
     public void init() {
-        userRepo = new UserServiceIntegrationTest();
+        userRepo = new UserServiceTest();
     }
 
     @Test
     public void test() {
-        User user = userRepo.createUser("user1", "qwe" , false);
+        User user = new User("user1", "qwe" , false);
         Video video = new Video(user, "New Vid", "New Desc",new Date(),"url" );
         Video savedVideo = videoRepository.saveAndFlush(video);
         assertNotNull(savedVideo);
