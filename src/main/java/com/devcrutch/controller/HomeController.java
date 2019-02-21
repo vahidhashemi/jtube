@@ -9,6 +9,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(){
+        int i = 0/ (1-1);
         return "Hello World";
     }
 }
