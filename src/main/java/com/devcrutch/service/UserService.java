@@ -43,4 +43,8 @@ public class UserService {
         }
          return null;
     }
+
+    public void clearAllData() {
+        userRepository.deleteAll();
+    }
 }

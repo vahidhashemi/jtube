@@ -2,6 +2,7 @@ package com.devcrutch;
 
 import com.devcrutch.model.User;
 import com.devcrutch.service.UserService;
+import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,6 +15,11 @@ import static org.junit.Assert.assertNotNull;
 public class UserServiceTest extends MainTest{
     @Autowired
     private UserService userService;
+
+    @After
+    public void clearDataBase() {
+        userService.clearAllData();
+    }
 
     @Test
     public void testCreateUser() {
@@ -34,7 +40,7 @@ public class UserServiceTest extends MainTest{
     @Test
     public void testUpdateUserProfile() {
         Long userId;
-        User user = new User("user10", "qwerty", false);
+        User user = new User("user", "qwerty", false);
         User createdUser = userService.createUser(user);
         userId = createdUser.getId();
         assertNotNull(createdUser);
@@ -46,7 +52,7 @@ public class UserServiceTest extends MainTest{
 
     @Test
     public void testAddNonAdminUser() {
-        User user = new User("user1", "qwerty",false);
+        User user = new User("user", "qwerty",false);
         User savedUser = userService.createUser(user);
         assertNotNull(savedUser);
         assertEquals(user, savedUser);
@@ -74,7 +80,7 @@ public class UserServiceTest extends MainTest{
 
     @Test
     public void testMakeUserAdmin() {
-        User user = new User("dummy2", "qwe", false);
+        User user = new User("dummy", "qwe", false);
         User savedUser = userService.createUser(user);
         User adminUser = userService.makeUserAdmin(savedUser.getId(), true);
         assertEquals(true, adminUser.isAdmin());
